@@ -117,6 +117,22 @@ public:
     // Purpose: Add a word to the Trie by creating nodes for each character
     void insert(string word) {
         // TODO: Implement this function
+        TrieNode* currentNode = root;
+        for(int i = 0; i < word.length(); i++) {
+            char c = word[i];
+            int index = c - 'a';
+            
+            if (currentNode->children[index] == nullptr) {
+                currentNode->children[index] = new TrieNode();
+            }
+            
+            currentNode = currentNode->children[index];
+        }
+        if(currentNode->isEndOfWord == false) {
+            wordCount++;
+        }
+        currentNode->isEndOfWord = true;
+
     }
     
     // Search for a word in the Trie
@@ -125,7 +141,18 @@ public:
     // Purpose: Check if the complete word exists in the Trie
     bool search(string word) {
         // TODO: Implement this function
-        return false; // placeholder
+        TrieNode* currentNode = root;
+        for(int i = 0; i < word.length(); i++) {
+            char c = word[i];
+            int index = c - 'a';
+            
+            if (currentNode->children[index] == nullptr) {
+                return false;
+            }
+            
+            currentNode = currentNode->children[index];
+        }
+        return currentNode->isEndOfWord;
     }
     
     // Check if any word starts with the given prefix
