@@ -161,8 +161,17 @@ public:
     // Purpose: Verify if the prefix exists in the Trie
     //          (doesn't need to be a complete word)
     bool startsWith(string prefix) {
-        // TODO: Implement this function
-        return false; // placeholder
+        if (root == nullptr) return false;
+        
+        TrieNode* curr = root;
+        for (char c : prefix) {
+            int index = tolower(c) - 'a';
+            if (index < 0 || index >= 26 || curr->children[index] == nullptr) {
+                return false;
+            }
+            curr = curr->children[index];
+        }
+        return true;
     }
     
     // Get all words that start with the given prefix
@@ -170,10 +179,19 @@ public:
     // Output: vector of strings that start with the prefix
     // Purpose: Find all complete words that begin with the given prefix
     vector<string> autocomplete(string prefix) {
-        vector<string> suggestions;
+       vector<string> suggestions;
+        if (root == nullptr) return suggestions;
         
-        // TODO: Implement this function
+        TrieNode* curr = root;
+        for (char c : prefix) {
+            int index = tolower(c) - 'a';
+            if (index < 0 || index >= 26 || curr->children[index] == nullptr) {
+                return suggestions;
+            }
+            curr = curr->children[index];
+        }
         
+        findAllWords(curr, prefix, suggestions);
         return suggestions;
     }
     
@@ -268,8 +286,14 @@ public:
     // application
     vector<string> autocomplete(string prefix, int limit) {
         vector<string> suggestions;
+        if (limit <= 0) return suggestions;
         
-        // TODO: Implement this function
+        vector<string> allSuggestions = autocomplete(prefix);
+        
+        int count = min((int)allSuggestions.size(), limit);
+        for (int i = 0; i < count; i++) {
+            suggestions.push_back(allSuggestions[i]);
+        }
         
         return suggestions;
     }
