@@ -232,9 +232,11 @@ public:
     // Purpose: Return every complete word stored in the Trie
     vector<string> getAllWords() {
         vector<string> words;
-        
-        // TODO: Implement this function
-        
+
+         // TODO: Implement this function
+        string CurrentWord = "";
+        findAllWords(root, CurrentWord, words);
+
         return words;
     }
     
@@ -251,7 +253,20 @@ public:
     // Output: "app"
     string longestPrefixOf(string word) {
         // TODO: Implement this function
-        return "";
+        TrieNode* currNode = root;
+        string prefix = "";
+        for (char c : word) {
+            c = tolower(c);
+            int index = c - 'a';
+            if (index<0|| index>=26||currNode->children[index] == nullptr){
+                break;
+            }
+            currNode = currNode->children[index];
+            prefix.push_back(c);
+        } 
+
+
+        return prefix;
     }
     
     // Check whether the Trie contains any words
@@ -260,7 +275,8 @@ public:
     // Purpose: Check if the Trie has no stored words
     bool isEmpty() {
         // TODO: Implement this function
-        return true; // placeholder
+
+        return wordCount==0;// placeholder
     }
     
     // Remove all words from the Trie
@@ -269,6 +285,11 @@ public:
     // Purpose: Completely clear the Trie
     void clear() {
         // TODO: Implement this function
+        
+        deleteNodes(root);
+        root = new TrieNode();
+        wordCount = 0;
+
     }
     
     // Get autocomplete suggestions with a maximum limit
